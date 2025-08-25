@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Vehicle Reservation request</title>
+	<link rel="stylesheet" href="reservation.css">
+</head>
+	
+<body>
+	<main>
+		<h1>Vehicle Reservation Request</h1>
+		<form action="response.html" method="get" name="reservation_form" id="reservation_form">
+			<fieldset>
+				<legend>General Information</legend>
+				<div>
+					<label for="pickup_date">Pickup Date:</label>
+					<input type="text" name="pickup_date" id="pickup_date" placeholder="mm/dd/yyyy" autofocus>
+					<span>*</span>
+				</div>
+				<div>
+					<label for="days">No. Days:</label>
+					<input type="text" name="days" id="days" placeholder="How many days?">
+					<span>*</span>
+				</div>       	
+			</fieldset>
+			<fieldset>
+				<legend>Preferences</legend>
+				<div>
+					<label>Vehicle Type:</label>
+					<input type="radio" name="vehicle" id="sedan" value="sedan" class="left" checked>Sedan	        	
+					<input type="radio" name="vehicle" id="truck" value="truck" class="left">Truck
+					<input type="radio" name="vehicle" id="sports" value="sports" class="left">Sports Car
+					<input type="radio" name="vehicle" id="minivan" value="minivan" class="left last">Minivan
+				</div>
+				<div>
+					<label>Engine Type:</label>
+					<input type="radio" name="engine" id="ev" value="ev" class="left" checked>EV
+					<input type="radio" name="engine" id="gas" value="gas" class="left">Gas
+					<input type="radio" name="engine" id="hybrid" value="hybrid" class="left last">Hybrid
+				</div>
+				<div>
+					<label>Colour:</label>
+					<select name="colour" id="colour">
+						<option value="black">Black</option>
+						<option value="white">White</option>
+						<option value="red">Red</option>
+						<option value="blue">Blue</option>        		        		        		
+					</select>
+				</div>
+				<div>
+					<input type="checkbox" name="convertible" id="convertible">Convertible
+				</div>
+			</fieldset>		
+			<fieldset>
+				<legend>Contact Information</legend>
+				<div>
+					<label for="name">Name:</label>
+					<input type="text" name="name" id="name">
+					<span>*</span>
+				</div>
+				<div>
+					<label for="email">Email:</label>
+					<input type="text" name="email" id="email">
+					<span>*</span>
+				</div>
+				<div>
+					<label for="phone">Phone:</label>
+					<input type="text" name="phone" id="phone" placeholder="999-999-9999">
+					<span>*</span>
+				</div>
+			</fieldset>
+			<div id="divSubmit">
+				<input type="submit" id="submit" value="Submit Request">
+			</div>
+		</form>
+		<small>Copyright&copy; Juan Jacobo Florez Monroy</small>
+	</main>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="reservation.js"></script>
+</body>
+</html>
