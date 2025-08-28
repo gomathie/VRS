@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Request System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+    <!-- Loading Screen -->
+    <div id="loading" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto"></div>
+            <p class="mt-4 text-gray-600">Loading Vehicle Request System...</p>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div id="app" class="flex flex-col md:flex-row h-screen overflow-hidden" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="w-full md:w-64 bg-gray-800 text-white flex-shrink-0">
+            <div class="p-6 border-b border-gray-700">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-blue-600 p-2 rounded-lg">
+                        <i class="fas fa-car text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">VehicleSys</h1>
+                        <p class="text-xs">Company Fleet Management</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 p-4">
+                <nav class="space-y-2">
+                    <a href="#"
+                        class="menu-item flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg font-medium"
+                        data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#"
+                        class="menu-item flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg"
+                        data-section="requests">
+                        <i class="fas fa-file-alt"></i>
+                        <span>My Requests</span>
+                    </a>
+                    <a href="#"
+                        class="menu-item flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg"
+                        data-section="vehicles">
+                        <i class="fas fa-car-side"></i>
+                        <span>Vehicles</span>
+                    </a>
+                    <a href="#"
+                        class="menu-item flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg"
+                        data-section="request-form">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Request Vehicle</span>
+                    </a>
+                    <a href="#"
+                        class="menu-item flex items-center space-x-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg"
+                        data-section="admin">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Admin Panel</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="p-4 border-t border-gray-700">
+                <div class="flex items-center space-x-3">
+                    <img src="https://placehold.co/40x40/3B82F6/FFFFFF?text=JD" alt="User"
+                        class="w-10 h-10 rounded-full">
+                    <div class="flex-1">
+                        <p class="text-sm font-medium">John Doe</p>
+                        <p class="text-xs">Admin</p>
+                    </div>
+                    <button id="logout-btn" class="text-gray-400 hover:text-red-500">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <button id="toggle-sidebar" class="text-gray-600 hover:text-gray-800">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <h2 id="page-title" class="text-2xl font-semibold text-gray-800">Dashboard</h2>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <input type="text" placeholder="Search..."
+                                class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <i class="fas fa-search absolute left-3 top-2.5 text-gray-400"></i>
+                        </div>
+
+                        <div class="relative">
+                            <button id="notifications-btn" class="text-gray-600 hover:text-gray-800 relative">
+                                <i class="fas fa-bell"></i>
+                                <span
+                                    class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                            </button>
+                            <div id="notifications"
+                                class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-10">
+                                <div class="p-4 border-b border-gray-200">
+                                    <h3 class="font-semibold text-gray-800">Notifications</h3>
+                                </div>
+                                <div class="p-4 space-y-3 max-h-96 overflow-y-auto" id="notifications-list">
+                                    <!-- Notifications will be populated by JavaScript -->
+                                </div>
+                                <div class="p-3 bg-gray-50 text-center">
+                                    <button id="view-all-notifications" class="text-blue-600 text-sm font-medium">View
+                                        All</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <main class="flex-1 overflow-y-auto p-6">
+                <!-- Content will be loaded dynamically -->
+                <div id="content"></div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Templates -->
+    <template id="dashboard-template">
+        <div class="space-y-6">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100">
+                            <i class="fas fa-car text-blue-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Total Vehicles</p>
+                            <p id="total-vehicles" class="text-2xl font-semibold text-gray-800">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-green-100">
+                            <i class="fas fa-check-circle text-green-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Available</p>
+                            <p id="available-vehicles" class="text-2xl font-semibold text-gray-800">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-yellow-100">
+                            <i class="fas fa-clock text-yellow-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Booked</p>
+                            <p id="booked-vehicles" class="text-2xl font-semibold text-gray-800">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-red-100">
+                            <i class="fas fa-exclamation-triangle text-red-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">In Use</p>
+                            <p id="in-use-vehicles" class="text-2xl font-semibold text-gray-800">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts and Map -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Vehicle Status Chart -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Vehicle Status Distribution</h3>
+                    <canvas id="statusChart" class="w-full h-64"></canvas>
+                </div>
+
+                <!-- Live Tracking Map -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Live Vehicle Tracking</h3>
+                    <div id="map" class="w-full h-64 md:h-full"></div>
+                </div>
+            </div>
+
+            <!-- Recent Requests -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                <div class="p-6 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-800">Recent Requests</h3>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4" id="recent-requests">
+                        <!-- Content will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="requests-template">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-800">My Vehicle Requests</h3>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4" id="my-requests">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="vehicles-template">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-800">Vehicle Fleet</h3>
+            </div>
+            <div class="p-6">
+                <div id="vehicles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Vehicles will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="request-form-template">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 max-w-2xl mx-auto">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-800">Request a Vehicle</h3>
+            </div>
+            <div class="p-6">
+                <form id="vehicleRequestForm" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Vehicle Type</label>
+                        <select id="vehicle-type"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required>
+                            <option value="">Select vehicle type...</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pickup Date & Time</label>
+                            <input type="datetime-local" id="pickup-time"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Return Date & Time</label>
+                            <input type="datetime-local" id="return-time"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pickup Location</label>
+                        <select id="pickup-location"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required>
+                            <option value="">Select pickup location...</option>
+                            <option value="main-office">Main Office</option>
+                            <option value="downtown-branch">Downtown Branch</option>
+                            <option value="warehouse">Warehouse</option>
+                            <option value="factory">Factory</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Purpose of Use</label>
+                        <textarea id="purpose" rows="4"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Please describe the purpose of your vehicle request..." required></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Vehicle Number</label>
+                        <select id="vehicle-number"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required>
+                            <option value="">Select vehicle number...</option>
+                        </select>
+                    </div>
+
+                    <div class="flex space-x-4">
+                        <button type="submit"
+                            class="flex-1 bg-blue-600 text-white py-3 rounded-lg text-lg font-medium hover:bg-blue-700 transition">Submit
+                            Request</button>
+                        <button type="button"
+                            class="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg text-lg font-medium hover:bg-gray-400 transition"
+                            id="cancel-request">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </template>
+
+    <template id="admin-template">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-800">Admin Panel</h3>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Pending Requests -->
+                    <div class="border border-gray-200 rounded-lg">
+                        <div class="p-4 bg-gray-50 border-b border-gray-200">
+                            <h4 class="font-semibold text-gray-800">Pending Requests <span id="pending-count"></span>
+                            </h4>
+                        </div>
+                        <div class="p-4 space-y-3" id="pending-requests">
+                            <!-- Content will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Vehicle Management -->
+                    <div class="border border-gray-200 rounded-lg">
+                        <div class="p-4 bg-gray-50 border-b border-gray-200">
+                            <h4 class="font-semibold text-gray-800">Vehicle Management</h4>
+                        </div>
+                        <div class="p-4" id="vehicle-management">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+    <script src="ui.js"></script>
+    <script src="navigation.js"></script>
+</body>
+
+</html>

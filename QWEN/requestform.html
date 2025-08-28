@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Request a Vehicle</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div class="container mx-auto p-6">
+        <h2 class="text-2xl font-semibold mb-4">Request a Vehicle</h2>
+        <form id="vehicleRequestForm" class="space-y-6 max-w-xl mx-auto">
+            <div>
+                <label class="block text-sm font-medium mb-2">Vehicle Type</label>
+                <select id="vehicle-type" class="w-full p-3 border rounded" required>
+                    <option value="">Select vehicle type...</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">Vehicle Number</label>
+                <select id="vehicle-number" class="w-full p-3 border rounded" required>
+                    <option value="">Select vehicle number...</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">Pickup Date & Time</label>
+                <input type="datetime-local" id="pickup-time" class="w-full p-3 border rounded" required>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">Return Date & Time</label>
+                <input type="datetime-local" id="return-time" class="w-full p-3 border rounded" required>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">Pickup Location</label>
+                <select id="pickup-location" class="w-full p-3 border rounded" required>
+                    <option value="">Select pickup location...</option>
+                    <option value="main-office">Main Office</option>
+                    <option value="downtown-branch">Downtown Branch</option>
+                    <option value="warehouse">Warehouse</option>
+                    <option value="factory">Factory</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">Purpose of Use</label>
+                <textarea id="purpose" rows="4" class="w-full p-3 border rounded" required></textarea>
+            </div>
+            <div class="flex space-x-4">
+                <button type="submit" class="flex-1 bg-blue-600 text-white py-3 rounded hover:bg-blue-700">Submit
+                    Request</button>
+                <button type="button" class="flex-1 bg-gray-300 text-gray-700 py-3 rounded hover:bg-gray-400"
+                    id="cancel-request">Cancel</button>
+            </div>
+        </form>
+    </div>
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+    <script src="ui.js"></script>
+    <script src="navigation.js"></script>
+</body>
+
+</html>
